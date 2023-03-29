@@ -5,6 +5,7 @@ canvas.height = window.innerHeight;
 const c = canvas.getContext("2d");
 console.log(c);
 
+//*****CLASS FOR PLAYER******
 class Player {
   constructor(x, y, radius, color) {
     this.x = x;
@@ -20,6 +21,7 @@ class Player {
   }
 }
 
+//******CLASS FOR BULLET*****
 class Bullet {
   constructor(x, y, radius, color, velocity, speed) {
     this.x = x;
@@ -42,6 +44,38 @@ class Bullet {
   }
 }
 
+//*******CLASS FOR PARTICLE (work same as bullet)******
+const friction = 0.95; // to reduce the speed of a particle
+class Particle {
+  constructor(x, y, radius, color, velocity, speed) {
+    this.x = x;
+    this.y = y;
+    this.radius = radius;
+    this.color = color;
+    this.velocity = velocity;
+    this.speed = speed;
+    this.alpha = 1;
+  }
+  draw() {
+    c.save();
+    c.globalAlpha = this.alpha;
+    c.beginPath();
+    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+    c.fillStyle = this.color;
+    c.fill();
+    c.restore();
+  }
+  update() {
+    this.draw();
+    this.velocity.x *= friction;
+    this.velocity.y *= friction;
+    this.x = this.x + this.velocity.x * this.speed;
+    this.y = this.y + this.velocity.y * this.speed;
+    this.alpha -= 0.01;
+  }
+}
+
+//******CLASS FOR ENEMY*******
 class Enemy {
   constructor(x, y, radius, color, velocity, speed) {
     this.x = x;
@@ -63,8 +97,11 @@ class Enemy {
     this.y = this.y + this.velocity.y * this.speed;
   }
 }
+
+//all arrays to store respective items
 const bullets = [];
 const enemies = [];
+const particles = [];
 
 function spawnEnemies() {
   setInterval(() => {
@@ -103,26 +140,36 @@ window.addEventListener("click", (event) => {
     x: Math.cos(angle),
     y: Math.sin(angle),
   };
-
+  //creating new bullets
   const bullet = new Bullet(
     canvas.width / 2,
     canvas.height / 2,
     5,
-    "red",
+    "white",
     velocity,
-    4
+    6
   );
   bullets.push(bullet);
   // console.log(bullets);
 });
 const x = canvas.width / 2;
 const y = canvas.height / 2;
-const player = new Player(x, y, 30, "blue");
+
+const player = new Player(x, y, 10, "white");//creating new player
 let animationid;
+
 function animate() {
   animationid = requestAnimationFrame(animate);
-  c.clearRect(0, 0, canvas.width, canvas.height);
+  c.fillStyle = "rgba(0,0,0,0.1)";
+  c.fillRect(0, 0, canvas.width, canvas.height);
   player.draw();
+  particles.forEach((particle, index) => {
+    if (particle.alpha <= 0) {
+      particles.splice(index, 1);
+    } else {
+      particle.update();
+    }
+  });
 
   bullets.forEach((bullet, bindex) => {
     bullet.update();
@@ -134,10 +181,11 @@ function animate() {
     ) {
       setTimeout(() => {
         bullets.splice(bindex, 1);
-        enemies.splice(eindex, 1);
+        // enemies.splice(eindex, 1);
       }, 0);
     }
   });
+
   enemies.forEach((enemy, eindex) => {
     enemy.update();
     const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
@@ -148,12 +196,36 @@ function animate() {
     bullets.forEach((bullet, bindex) => {
       const dist = Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y);
       if (dist - enemy.radius - bullet.radius < 1) {
-        setTimeout(() => {
-          bullets.splice(bindex, 1);
-          enemies.splice(eindex, 1);
-        }, 0);
+        for (i = 0; i < enemy.radius * 2; i++) {
+          particles.push(
+            new Particle(
+              bullet.x,
+              bullet.y,
+              Math.random() * 2,
+              enemy.color,
+              {
+                x: Math.random() - 0.5,
+                y: Math.random() - 0.5,
+              },
+              8
+            )
+          );
+        }
+
+        if (enemy.radius - 10 > 10) {
+          enemy.radius -= 10;
+          setTimeout(() => {
+            bullets.splice(bindex, 1);
+          }, 0);
+        } else {
+          setTimeout(() => {
+            bullets.splice(bindex, 1);
+            enemies.splice(eindex, 1);
+          }, 0);
+        }
       }
     });
   });
 }
+
 animate();
