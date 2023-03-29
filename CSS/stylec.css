@@ -1,4 +1,22 @@
-body{
+*{
+  margin: 0;
+  padding: 0;
+}
+body {
     margin: 0px;
     overflow: hidden;
+    background-color: black;
+    font-family: sans-serif;
+  }
+
+#score{
+  color: white;
+  position: fixed;
+  padding: 5px;
+  font-size: small;
+  user-select: none;
+}
+
+#scoreCount{
+
 }
