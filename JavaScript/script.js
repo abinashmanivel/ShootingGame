@@ -1,107 +1,129 @@
+import Player from "./Player.js";
+import Enemy from "./Enemy.js";
+import Particle from "./Particle.js";
+import Bullet from "./Bullet.js";
+
 const canvas = document.querySelector("canvas");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+const scoreBoard = document.querySelector("#scoreCount");
+const result = document.querySelector("#menu");
+const finalScore = document.querySelector("#finalScore");
+const startButton = document.querySelector("#startGameButton");
 
-const c = canvas.getContext("2d");
-console.log(c);
+export const c = canvas.getContext("2d");
+export const friction = 0.97; // to reduce the speed of a particle
+// console.log(c);
 
 //*****CLASS FOR PLAYER******
-class Player {
-  constructor(x, y, radius, color) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-  }
-  draw() {
-    c.beginPath();
-    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = this.color;
-    c.fill();
-  }
-}
+// class Player {
+//   constructor(x, y, radius, color) {
+//     this.x = x;
+//     this.y = y;
+//     this.radius = radius;
+//     this.color = color;
+//   }
+//   draw() {
+//     c.beginPath();
+//     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+//     c.fillStyle = this.color;
+//     c.fill();
+//   }
+// }
 
 //******CLASS FOR BULLET*****
-class Bullet {
-  constructor(x, y, radius, color, velocity, speed) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-    this.velocity = velocity;
-    this.speed = speed;
-  }
-  draw() {
-    c.beginPath();
-    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = this.color;
-    c.fill();
-  }
-  update() {
-    this.draw();
-    this.x = this.x + this.velocity.x * this.speed;
-    this.y = this.y + this.velocity.y * this.speed;
-  }
-}
+// class Bullet {
+//   constructor(x, y, radius, color, velocity, speed) {
+//     this.x = x;
+//     this.y = y;
+//     this.radius = radius;
+//     this.color = color;
+//     this.velocity = velocity;
+//     this.speed = speed;
+//   }
+//   draw() {
+//     c.beginPath();
+//     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+//     c.fillStyle = this.color;
+//     c.fill();
+//   }
+//   update() {
+//     this.draw();
+//     this.x = this.x + this.velocity.x * this.speed;
+//     this.y = this.y + this.velocity.y * this.speed;
+//   }
+// }
 
 //*******CLASS FOR PARTICLE (work same as bullet)******
-const friction = 0.95; // to reduce the speed of a particle
-class Particle {
-  constructor(x, y, radius, color, velocity, speed) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-    this.velocity = velocity;
-    this.speed = speed;
-    this.alpha = 1;
-  }
-  draw() {
-    c.save();
-    c.globalAlpha = this.alpha;
-    c.beginPath();
-    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = this.color;
-    c.fill();
-    c.restore();
-  }
-  update() {
-    this.draw();
-    this.velocity.x *= friction;
-    this.velocity.y *= friction;
-    this.x = this.x + this.velocity.x * this.speed;
-    this.y = this.y + this.velocity.y * this.speed;
-    this.alpha -= 0.01;
-  }
-}
+
+// class Particle {
+//   constructor(x, y, radius, color, velocity, speed) {
+//     this.x = x;
+//     this.y = y;
+//     this.radius = radius;
+//     this.color = color;
+//     this.velocity = velocity;
+//     this.speed = speed;
+//     this.alpha = 1;
+//   }
+//   draw() {
+//     c.save();
+//     c.globalAlpha = this.alpha;
+//     c.beginPath();
+//     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+//     c.fillStyle = this.color;
+//     c.fill();
+//     c.restore();
+//   }
+//   update() {
+//     this.draw();
+//     this.velocity.x *= friction;
+//     this.velocity.y *= friction;
+//     this.x = this.x + this.velocity.x * this.speed;
+//     this.y = this.y + this.velocity.y * this.speed;
+//     this.alpha -= 0.01;
+//   }
+// }
 
 //******CLASS FOR ENEMY*******
-class Enemy {
-  constructor(x, y, radius, color, velocity, speed) {
-    this.x = x;
-    this.y = y;
-    this.radius = radius;
-    this.color = color;
-    this.velocity = velocity;
-    this.speed = speed;
-  }
-  draw() {
-    c.beginPath();
-    c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    c.fillStyle = this.color;
-    c.fill();
-  }
-  update() {
-    this.draw();
-    this.x = this.x + this.velocity.x * this.speed;
-    this.y = this.y + this.velocity.y * this.speed;
-  }
-}
+// class Enemy {
+//   constructor(x, y, radius, color, velocity, speed) {
+//     this.x = x;
+//     this.y = y;
+//     this.radius = radius;
+//     this.color = color;
+//     this.velocity = velocity;
+//     this.speed = speed;
+//   }
+//   draw() {
+//     c.beginPath();
+//     c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+//     c.fillStyle = this.color;
+//     c.fill();
+//   }
+//   update() {
+//     this.draw();
+//     this.x = this.x + this.velocity.x * this.speed;
+//     this.y = this.y + this.velocity.y * this.speed;
+//   }
+// }
 
 //all arrays to store respective items
-const bullets = [];
-const enemies = [];
-const particles = [];
+let bullets = [];
+let enemies = [];
+let particles = [];
+
+//count of current score
+let score = 0;
+
+//set everything to 0
+function init() {
+  bullets = [];
+  enemies = [];
+  particles = [];
+  score = 0;
+  scoreBoard.innerHTML = 0;
+}
 
 function spawnEnemies() {
   setInterval(() => {
@@ -128,7 +150,6 @@ function spawnEnemies() {
     enemies.push(new Enemy(x, y, radius, color, velocity, speed));
   }, 1000);
 }
-spawnEnemies();
 
 window.addEventListener("click", (event) => {
   //console.log(event);
@@ -147,7 +168,7 @@ window.addEventListener("click", (event) => {
     5,
     "white",
     velocity,
-    6
+    5
   );
   bullets.push(bullet);
   // console.log(bullets);
@@ -155,7 +176,7 @@ window.addEventListener("click", (event) => {
 const x = canvas.width / 2;
 const y = canvas.height / 2;
 
-const player = new Player(x, y, 10, "white");//creating new player
+const player = new Player(x, y, 10, "white"); //creating new player
 let animationid;
 
 function animate() {
@@ -191,12 +212,15 @@ function animate() {
     const dist = Math.hypot(player.x - enemy.x, player.y - enemy.y);
     if (dist - enemy.radius - player.radius < 1) {
       cancelAnimationFrame(animationid);
+      menu.style.display = "flex";
+      finalScore.innerHTML = score;
+      startButton.innerHTML = "Restart Game";
     }
 
     bullets.forEach((bullet, bindex) => {
       const dist = Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y);
       if (dist - enemy.radius - bullet.radius < 1) {
-        for (i = 0; i < enemy.radius * 2; i++) {
+        for (let i = 0; i < enemy.radius * 2; i++) {
           particles.push(
             new Particle(
               bullet.x,
@@ -213,19 +237,27 @@ function animate() {
         }
 
         if (enemy.radius - 10 > 10) {
+          score += 30;
           enemy.radius -= 10;
           setTimeout(() => {
             bullets.splice(bindex, 1);
           }, 0);
         } else {
+          score += 120;
           setTimeout(() => {
             bullets.splice(bindex, 1);
             enemies.splice(eindex, 1);
           }, 0);
         }
+        scoreBoard.innerHTML = score;
       }
     });
   });
 }
 
-animate();
+startButton.addEventListener("click", () => {
+  init();
+  menu.style.display = "none";
+  spawnEnemies();
+  animate();
+});
