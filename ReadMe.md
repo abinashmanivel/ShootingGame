@@ -36,8 +36,12 @@ Javascript
 We have tried our best to create user friendly shooting game.
 
 ### Contributers
-Abinash Manivel - 
-Nilesh Pawar - 
-Priyanshi Jhanwar -
-Ritesh Kumar - 
-Shaswat Shashank-https://github.com/shaswat97-crypto
+Abinash Manivel 
+
+Nilesh Pawar 
+
+Priyanshi Jhanwar
+
+Ritesh Kumar
+
+Shaswat Shashank
